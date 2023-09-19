@@ -7,6 +7,7 @@ const User = sequelize.define("user", {
   name: { type: DataTypes.STRING },
   password: { type: DataTypes.STRING },
   role: { type: DataTypes.STRING, defaultValue: "USER" },
+  banned: { type: DataTypes.BOOLEAN, defaultValue: false },
 });
 
 const Basket = sequelize.define("basket", {
