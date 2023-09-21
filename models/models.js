@@ -7,7 +7,7 @@ const User = sequelize.define("user", {
   name: { type: DataTypes.STRING },
   password: { type: DataTypes.STRING },
   role: { type: DataTypes.STRING, defaultValue: "USER" },
-  banned: { type: DataTypes.BOOLEAN, defaultValue: false },
+  //////status: { type: DataTypes.STRING, defaultValue: "ACTIVE" },
 });
 
 const Basket = sequelize.define("basket", {
@@ -93,7 +93,7 @@ Product.belongsTo(Brand);
 Product.hasMany(BasketProduct);
 BasketProduct.belongsTo(Product);
 
-Product.hasMany(ProductInfo);
+Product.hasMany(ProductInfo, { as: "info" });
 ProductInfo.belongsTo(Product);
 
 User.hasMany(QuestionUser);
