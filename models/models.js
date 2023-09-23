@@ -7,7 +7,6 @@ const User = sequelize.define("user", {
   name: { type: DataTypes.STRING },
   password: { type: DataTypes.STRING },
   role: { type: DataTypes.STRING, defaultValue: "USER" },
-  //////status: { type: DataTypes.STRING, defaultValue: "ACTIVE" },
 });
 
 const Basket = sequelize.define("basket", {
@@ -22,7 +21,6 @@ const Product = sequelize.define("product", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING, unique: true, allowNull: false },
   price: { type: DataTypes.INTEGER, allowNull: false },
-  rating: { type: DataTypes.INTEGER, defaultValue: 0 },
   img: { type: DataTypes.STRING, allowNull: false },
 });
 
@@ -31,14 +29,9 @@ const Type = sequelize.define("type", {
   name: { type: DataTypes.STRING, unique: true, allowNull: false },
 });
 
-const Brand = sequelize.define("brand", {
+const Condition = sequelize.define("condition", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING, unique: true, allowNull: false },
-});
-
-const Rating = sequelize.define("rating", {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  name: { type: DataTypes.INTEGER, allowNull: false },
 });
 
 const ProductInfo = sequelize.define("product_info", {
@@ -49,46 +42,38 @@ const ProductInfo = sequelize.define("product_info", {
 
 const Review = sequelize.define("review", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  name: { type: DataTypes.INTEGER, allowNull: false },
+  name: { type: DataTypes.STRING, allowNull: false },
   description: { type: DataTypes.STRING, allowNull: false },
   moderation: { type: DataTypes.BOOLEAN, defaultValue: false },
 });
 
-const QuestionUser = sequelize.define("question_user", {
+const Order = sequelize.define("order", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.INTEGER, allowNull: false },
   description: { type: DataTypes.STRING, allowNull: false },
 });
 
-const AnswerAdmin = sequelize.define("answer_admin", {
+const Notification = sequelize.define("answer_admin", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.INTEGER, allowNull: false },
   description: { type: DataTypes.STRING, allowNull: false },
 });
 
-const OrderUsers = sequelize.define("answer_users", {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  moderation: { type: DataTypes.BOOLEAN, defaultValue: false },
-});
-
-const TypeBrand = sequelize.define("type_brand", {
+const TypeCondition = sequelize.define("type_condition", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 });
 
 User.hasOne(Basket);
 Basket.belongsTo(User);
 
-User.hasMany(Rating);
-Rating.belongsTo(User);
-
-Basket.hasMany(BasketProduct);
+Basket.hasMany(BasketProduct, { as: "basketproduct" });
 BasketProduct.belongsTo(Basket);
 
 Type.hasMany(Product);
 Product.belongsTo(Type);
 
-Brand.hasMany(Product);
-Product.belongsTo(Brand);
+Condition.hasMany(Product);
+Product.belongsTo(Condition);
 
 Product.hasMany(BasketProduct);
 BasketProduct.belongsTo(Product);
@@ -96,20 +81,20 @@ BasketProduct.belongsTo(Product);
 Product.hasMany(ProductInfo, { as: "info" });
 ProductInfo.belongsTo(Product);
 
-User.hasMany(QuestionUser);
-QuestionUser.belongsTo(User);
+User.hasMany(Order);
+Order.belongsTo(User);
 
-User.hasMany(AnswerAdmin);
-AnswerAdmin.belongsTo(User);
+User.hasMany(Notification);
+Notification.belongsTo(User);
 
-OrderUsers.hasMany(Basket);
-Basket.belongsTo(OrderUsers);
+Order.hasOne(Notification);
+Notification.belongsTo(Order);
 
 User.hasMany(Review);
 Review.belongsTo(User);
 
-Type.belongsToMany(Brand, { through: TypeBrand });
-Brand.belongsToMany(Type, { through: TypeBrand });
+Type.belongsToMany(Condition, { through: TypeCondition });
+Condition.belongsToMany(Type, { through: TypeCondition });
 
 module.exports = {
   User,
@@ -117,12 +102,10 @@ module.exports = {
   BasketProduct,
   Product,
   Type,
-  Brand,
-  Rating,
+  Condition,
   ProductInfo,
   Review,
-  QuestionUser,
-  AnswerAdmin,
-  OrderUsers,
-  TypeBrand,
+  Order,
+  Notification,
+  TypeCondition,
 };

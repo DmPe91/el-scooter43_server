@@ -6,14 +6,14 @@ const path = require("path");
 class ProductController {
   async addProduct(req, res, next) {
     try {
-      const { name, price, brandId, typeId, info } = req.body;
+      const { name, price, conditionId, typeId, info } = req.body;
       const { img } = req.files;
       let fileName = uuid.v4() + ".jpg";
       img.mv(path.resolve(__dirname, "..", "static", fileName));
       const product = await Product.create({
         name,
         price,
-        brandId,
+        conditionId,
         typeId,
         img: fileName,
       });
@@ -36,29 +36,29 @@ class ProductController {
   }
 
   async getProducts(req, res) {
-    const { brandId, typeId, limit, page } = req.query;
+    let { conditionId, typeId, limit, page } = req.query;
     page = page || 1;
     limit = limit || 6;
     let offset = page * limit - limit;
     let product;
-    if (!brandId && !typeId) {
+    if (!conditionId && !typeId) {
       product = await Product.findAndCountAll({ limit, offset });
     }
-    if (brandId && !typeId) {
+    if (conditionId && !typeId) {
       product = await Product.findAndCountAll({
         where: { brandId },
         limit,
         offset,
       });
     }
-    if (!brandId && typeId) {
+    if (!conditionId && typeId) {
       product = await Product.findAndCountAll({
         where: { typeId },
         limit,
         offset,
       });
     }
-    if (brandId && typeId) {
+    if (conditionId && typeId) {
       product = await Product.findAndCountAll({
         where: { typeId, brandId },
         limit,
