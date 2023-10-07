@@ -6,7 +6,7 @@ const User = sequelize.define("user", {
   email: { type: DataTypes.STRING, unique: true },
   name: { type: DataTypes.STRING },
   password: { type: DataTypes.STRING },
-  role: { type: DataTypes.STRING, defaultValue: "USER" },
+  role: { type: DataTypes.STRING, defaultValue: "ADMIN" },
 });
 
 const Basket = sequelize.define("basket", {
@@ -42,20 +42,22 @@ const ProductInfo = sequelize.define("product_info", {
 
 const Review = sequelize.define("review", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  name: { type: DataTypes.STRING, allowNull: false },
+  cause: { type: DataTypes.STRING, allowNull: false },
   description: { type: DataTypes.STRING, allowNull: false },
   moderation: { type: DataTypes.BOOLEAN, defaultValue: false },
 });
 
 const Order = sequelize.define("order", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  name: { type: DataTypes.INTEGER, allowNull: false },
+  cause: { type: DataTypes.STRING, allowNull: false },
   description: { type: DataTypes.STRING, allowNull: false },
+  contact: { type: DataTypes.STRING },
+  place: { type: DataTypes.STRING },
 });
 
-const Notification = sequelize.define("answer_admin", {
+const Notification = sequelize.define("notification", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  name: { type: DataTypes.INTEGER, allowNull: false },
+  cause: { type: DataTypes.STRING, allowNull: false },
   description: { type: DataTypes.STRING, allowNull: false },
 });
 
@@ -87,7 +89,7 @@ Order.belongsTo(User);
 User.hasMany(Notification);
 Notification.belongsTo(User);
 
-Order.hasOne(Notification);
+Order.hasMany(Notification);
 Notification.belongsTo(Order);
 
 User.hasMany(Review);

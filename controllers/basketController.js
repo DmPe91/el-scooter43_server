@@ -1,19 +1,22 @@
-const { Basket, BasketProduct } = require("../models/models");
+const { Basket, BasketProduct, Product } = require("../models/models");
 const ApiError = require("../error/ApiError");
 
 class BasketController {
   async addBasketProduct(req, res, next) {
     try {
-      const { productId, basketId } = req.body;
+      let { productId, basketId } = req.params;
+
       const basketPoduct = await BasketProduct.create({
         basketId,
         productId,
       });
+
       return res.json(basketPoduct);
     } catch (e) {
       next(ApiError.badRequest(e.message));
     }
   }
+
   async getAllBasket(req, res) {
     const basket = await Basket.findAndCountAll({});
     return res.json(basket);
@@ -22,7 +25,7 @@ class BasketController {
     const { id } = req.params;
 
     const basket = await Basket.findOne({
-      where: { id },
+      where: { userId: id },
       include: [{ model: BasketProduct, as: "basketproduct" }],
     });
     return res.json(basket);

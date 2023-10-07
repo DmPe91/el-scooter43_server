@@ -6,8 +6,9 @@ const path = require("path");
 class ProductController {
   async addProduct(req, res, next) {
     try {
-      const { name, price, conditionId, typeId, info } = req.body;
-      const { img } = req.files;
+      let { name, price, conditionId, typeId, info } = req.body;
+      price = Number(price);
+      let { img } = req.files;
       let fileName = uuid.v4() + ".jpg";
       img.mv(path.resolve(__dirname, "..", "static", fileName));
       const product = await Product.create({
@@ -20,25 +21,25 @@ class ProductController {
 
       if (info) {
         info = JSON.parse(info);
-        info.forEach((i) =>
+        info.forEach((i) => {
           ProductInfo.create({
-            title: i.title,
+            tittle: i.tittle,
             description: i.description,
             productId: product.id,
-          })
-        );
+          });
+        });
       }
 
       return res.json(product);
     } catch (e) {
-      next(ApiError.badRequest(e.message));
+      next(ApiError.badRequest(e.message + "test"));
     }
   }
 
   async getProducts(req, res) {
     let { conditionId, typeId, limit, page } = req.query;
     page = page || 1;
-    limit = limit || 6;
+    limit = limit || 9;
     let offset = page * limit - limit;
     let product;
     if (!conditionId && !typeId) {
@@ -46,7 +47,7 @@ class ProductController {
     }
     if (conditionId && !typeId) {
       product = await Product.findAndCountAll({
-        where: { brandId },
+        where: { conditionId },
         limit,
         offset,
       });
@@ -60,7 +61,7 @@ class ProductController {
     }
     if (conditionId && typeId) {
       product = await Product.findAndCountAll({
-        where: { typeId, brandId },
+        where: { typeId, conditionId },
         limit,
         offset,
       });
@@ -77,7 +78,7 @@ class ProductController {
     return res.json(product);
   }
 
-  async deleteProduct(req, res) {
+  async deleteProduct(req, res, next) {
     try {
       const { id } = req.body;
       await Product.destroy({ where: { id: id } });

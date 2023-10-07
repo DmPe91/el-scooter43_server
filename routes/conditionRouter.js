@@ -5,6 +5,6 @@ const ConditionController = require("../controllers/conditionController");
 router.post("/", ConditionController.addCondition);
 router.get("/", ConditionController.getCondition);
 
-router.delete("/delete/:id", ConditionController.deleteCondition);
+router.delete("/", ConditionController.deleteCondition);
 
 module.exports = router;

@@ -4,10 +4,10 @@ const ApiError = require("../error/ApiError");
 class ReviewController {
   async addReview(req, res, next) {
     try {
-      const { userId, name, description } = req.body;
+      const { userId, cause, description } = req.body;
       const review = await Review.create({
         userId,
-        name,
+        cause,
         description,
       });
       return res.json(review);

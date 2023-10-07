@@ -28,7 +28,7 @@ class UserController {
     });
     const basket = await Basket.create({ userId: user.id });
     const token = generateJwt(user.id, user.email, user.role, user.name);
-    return res.json(token);
+    return res.json({ token });
   }
 
   async login(req, res, next) {
@@ -45,14 +45,14 @@ class UserController {
     return res.json({ token });
   }
 
-  async auth(req, res, next) {
+  async auth(req, res) {
     const token = generateJwt(
       req.user.id,
       req.user.email,
       req.user.role,
       req.user.name
     );
-    return res.json(token);
+    return res.json({ token });
   }
 
   async deleteUser(req, res) {
