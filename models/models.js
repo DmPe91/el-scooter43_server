@@ -15,6 +15,9 @@ const Basket = sequelize.define("basket", {
 
 const BasketProduct = sequelize.define("basket_product", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  name: { type: DataTypes.STRING, allowNull: false },
+  price: { type: DataTypes.INTEGER, allowNull: false },
+  img: { type: DataTypes.STRING, allowNull: false },
 });
 
 const Product = sequelize.define("product", {
@@ -55,12 +58,6 @@ const Order = sequelize.define("order", {
   place: { type: DataTypes.STRING },
 });
 
-const Notification = sequelize.define("notification", {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  cause: { type: DataTypes.STRING, allowNull: false },
-  description: { type: DataTypes.STRING, allowNull: false },
-});
-
 const TypeCondition = sequelize.define("type_condition", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 });
@@ -86,12 +83,6 @@ ProductInfo.belongsTo(Product);
 User.hasMany(Order);
 Order.belongsTo(User);
 
-User.hasMany(Notification);
-Notification.belongsTo(User);
-
-Order.hasMany(Notification);
-Notification.belongsTo(Order);
-
 User.hasMany(Review);
 Review.belongsTo(User);
 
@@ -108,6 +99,6 @@ module.exports = {
   ProductInfo,
   Review,
   Order,
-  Notification,
+
   TypeCondition,
 };

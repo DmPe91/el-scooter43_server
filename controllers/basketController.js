@@ -6,9 +6,16 @@ class BasketController {
     try {
       let { productId, basketId } = req.params;
 
+      const product = await Product.findOne({
+        where: { id: productId },
+      });
+
       const basketPoduct = await BasketProduct.create({
         basketId,
         productId,
+        name: product.name,
+        img: product.img,
+        price: product.price,
       });
 
       return res.json(basketPoduct);
@@ -32,7 +39,7 @@ class BasketController {
   }
   async deleteBasketProduct(req, res, next) {
     try {
-      const { id } = req.body;
+      const { id } = req.params;
       await BasketProduct.destroy({ where: { id: id } });
       return res.json("ok!");
     } catch (e) {

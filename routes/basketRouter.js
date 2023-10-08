@@ -7,6 +7,6 @@ const RoleauthMiddleware = require("../middleware/checkRoleMidleware");
 router.post("/:basketId/product/:productId", BasketController.addBasketProduct);
 router.get("/", BasketController.getAllBasket);
 router.get("/:id", BasketController.getBasket);
-router.delete("/:id", authMiddleware, BasketController.deleteBasketProduct);
+router.delete("/:id", BasketController.deleteBasketProduct);
 
 module.exports = router;
