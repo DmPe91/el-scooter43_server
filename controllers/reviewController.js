@@ -30,7 +30,7 @@ class ReviewController {
   }
   async deleteReview(req, res, next) {
     try {
-      const { id } = req.body;
+      const { id } = req.params;
       await Review.destroy({ where: { id: id } });
       return res.json("ok!");
     } catch (e) {

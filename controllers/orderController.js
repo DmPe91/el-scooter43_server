@@ -30,7 +30,7 @@ class OrderController {
   }
   async deleteOrder(req, res) {
     try {
-      const { id } = req.body;
+      const { id } = req.params;
       await Order.destroy({ where: { id: id } });
       return res.json("ok!");
     } catch (e) {

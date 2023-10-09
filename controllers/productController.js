@@ -80,7 +80,7 @@ class ProductController {
 
   async deleteProduct(req, res, next) {
     try {
-      const { id } = req.body;
+      const { id } = req.params;
       await Product.destroy({ where: { id: id } });
       return res.json("ok!");
     } catch (e) {

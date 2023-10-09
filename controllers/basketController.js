@@ -25,7 +25,9 @@ class BasketController {
   }
 
   async getAllBasket(req, res) {
-    const basket = await Basket.findAndCountAll({});
+    const basket = await Basket.findAndCountAll({
+      include: [{ model: BasketProduct, as: "basketproduct" }],
+    });
     return res.json(basket);
   }
   async getBasket(req, res) {

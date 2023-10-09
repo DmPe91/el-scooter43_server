@@ -15,7 +15,7 @@ class ConditionController {
 
   async deleteCondition(req, res) {
     try {
-      const { id } = req.body;
+      const { id } = req.params;
       await Condition.destroy({ where: { id: id } });
       return res.json("ok!");
     } catch (e) {
