@@ -1,10 +1,11 @@
 const Router = require("express");
 const router = new Router();
 const OrderController = require("../controllers/orderController");
+const RoleauthMiddleware = require("../middleware/checkRoleMidleware");
 
-router.get("/:id", OrderController.getOrder);
-router.get("/", OrderController.getAllOrder);
+router.get("/:id", RoleauthMiddleware, OrderController.getOrder);
+router.get("/", RoleauthMiddleware, OrderController.getAllOrder);
 router.post("/", OrderController.addOrder);
-router.delete("/:id", OrderController.deleteOrder);
+router.delete("/:id", RoleauthMiddleware, OrderController.deleteOrder);
 
 module.exports = router;
